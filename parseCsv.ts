@@ -31,7 +31,8 @@ const trades = fs
 for (let i = 1; i < trades.length; i++) {
   const wTrade = new WebullTrade(trades[i]);
   //   console.log("singleTrade", wTrade);
-  if (wTrade.status && wTrade.status.toLowerCase() !== "filled") continue;
+  if (!wTrade) continue;
+  if (wTrade.status?.toLowerCase() !== "filled") continue;
   const customTrade = new CustomTrade(wTrade);
   console.log("customTrade", customTrade);
 }

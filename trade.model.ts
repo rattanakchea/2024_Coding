@@ -44,6 +44,13 @@ export class CustomTrade {
     this.name = wTrade.name;
     this.ticker = ticker;
     this.expirationDate = expirationDate;
-    this.strike = strike + side === "Call" ? "C" : "P";
+    this.strike = strike + (side === "Call" ? "C" : "P");
+    if (wTrade.side?.toLowerCase() === "buy") {
+      this.entryDateTime = wTrade.filledTime;
+    } else if (wTrade.side?.toLowerCase() === "sell") {
+      this.exitDateTime = wTrade.filledTime;
+    }
   }
 }
+
+// Testing ?
