@@ -1,4 +1,4 @@
-import { CustomTrade, WebullTrade } from "./trade.model";
+import { CustomTrade, TradeJournal, WebullTrade } from "./trade.model";
 
 // Include fs module
 const fs = require("fs");
@@ -28,11 +28,9 @@ const trades = fs
 // Map to array of {name: value, side: value, ...}
 // console.log("trades: ", trades);
 
-for (let i = 1; i < trades.length; i++) {
-  const wTrade = new WebullTrade(trades[i]);
-  //   console.log("singleTrade", wTrade);
-  if (!wTrade) continue;
-  if (wTrade.status?.toLowerCase() !== "filled") continue;
-  const customTrade = new CustomTrade(wTrade);
-  console.log("customTrade", customTrade);
-}
+// console.log("sellOrders", sellOrders);
+
+let tradeJournal = new TradeJournal(trades.slice(1));
+tradeJournal.init();
+
+console.log("trades", tradeJournal.trades);
