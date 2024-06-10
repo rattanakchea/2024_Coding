@@ -1,9 +1,10 @@
-import { CustomTrade, TradeJournal, WebullTrade } from "./trade.model";
+import { TradeJournal } from "./tradeJournal.model";
 
 // Include fs module
 const fs = require("fs");
 
-const fileName = "Webull_Orders_Records_Options.csv";
+// const fileName = "Webull_Orders_Records_Options.csv";
+const fileName = "webull_trade1.csv";
 
 // convert trades string to Array of string
 const trades = fs
@@ -25,12 +26,14 @@ const trades = fs
 //     'Filled Time\r'
 //   ],
 
-// Map to array of {name: value, side: value, ...}
-// console.log("trades: ", trades);
+let tradeJournal = new TradeJournal(trades.slice(1).reverse(), "webull");
+console.log("all trades", tradeJournal.trades.length, tradeJournal.trades);
+console.log("buy trades", tradeJournal.webullTradeModel.getOrders("buy").length);
+console.log("sell trades", tradeJournal.webullTradeModel.getOrders("sell").length);
 
-// console.log("sellOrders", sellOrders);
-
-let tradeJournal = new TradeJournal(trades.slice(1));
 tradeJournal.init();
+console.log("completeTrades trades", tradeJournal.getCompletedTrades().length, tradeJournal.getCompletedTrades());
+console.log("buy trades", tradeJournal.webullTradeModel.buyTrades);
+console.log("sell  trades", tradeJournal.webullTradeModel.sellTrades);
 
-console.log("trades", tradeJournal.trades);
+// Pair the trade that has the same name and different side (buy, sell)
