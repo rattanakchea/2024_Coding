@@ -1,3 +1,7 @@
+import { mkConfig, generateCsv, asString } from "export-to-csv";
+import { writeFile } from "node:fs";
+import { Buffer } from "node:buffer";
+
 import { TradeJournal } from "./tradeJournal.model";
 
 // Include fs module
@@ -32,8 +36,21 @@ console.log("buy trades", tradeJournal.webullTradeModel.getOrders("buy").length)
 console.log("sell trades", tradeJournal.webullTradeModel.getOrders("sell").length);
 
 tradeJournal.init();
-console.log("completeTrades trades", tradeJournal.getCompletedTrades().length, tradeJournal.getCompletedTrades());
+console.log("completeTrades trades", tradeJournal.completedTrades.length, tradeJournal.completedTrades);
 console.log("buy trades", tradeJournal.webullTradeModel.buyTrades);
 console.log("sell  trades", tradeJournal.webullTradeModel.sellTrades);
 
-// Pair the trade that has the same name and different side (buy, sell)
+// ------- export to csv
+// mkConfig merges your options with the defaults
+// and returns WithDefaults<ConfigOptions>
+const csvConfig = mkConfig({ useKeysAsHeaders: true });
+
+const csv = generateCsv(csvConfig)([]);
+const filename = `${csvConfig.filename}.csv`;
+const csvBuffer = new Uint8Array(Buffer.from(asString(csv)));
+
+// Write the csv file to disk
+writeFile(filename, csvBuffer, (err) => {
+  if (err) throw err;
+  console.log("file saved: ", filename);
+});

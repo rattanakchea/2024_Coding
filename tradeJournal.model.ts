@@ -52,7 +52,7 @@ export class TradeJournal {
   trades: CustomTrade[] = []; // can be a Hashmap?
 
   webullTradeModel: any;
-  completeTrade: CustomTrade[] = []; // complete has buy-sell order
+  private _completedTrades: CustomTrade[] = []; // have buy-sell order
 
   constructor(tradesStringArray: string[][], broker: string) {
     if (broker === "webull") {
@@ -61,11 +61,16 @@ export class TradeJournal {
   }
 
   init() {
-    this.webullTradeModel.processTrade();
+    const trades = this.webullTradeModel.processTrade();
+    this.completedTrades = trades;
   }
 
-  getCompletedTrades() {
-    return this.webullTradeModel.completedTrades;
+  set completedTrades(trades) {
+    this.completedTrades = trades;
+  }
+
+  get completedTrades() {
+    return this._completedTrades;
   }
 }
 

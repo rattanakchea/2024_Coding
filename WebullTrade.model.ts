@@ -46,7 +46,8 @@ export class WebullTradeModel {
     return this.allTrades.filter((item) => item.side.toLowerCase() === orderSide);
   }
 
-  processTradeOld() {
+  // Not correct implementation
+  processTradeOld(): WebullTrade[][] {
     // complete trade count
     for (let i = 0; i < this.sellTrades.length; i++) {
       const sellOrder = this.sellTrades[i];
@@ -71,9 +72,10 @@ export class WebullTradeModel {
         this.sellTrades[i].filled = -sellOrder.filled;
       }
     }
+    return this.completedTrades;
   }
 
-  processTrade() {
+  processTrade(): WebullTrade[][] {
     // complete trade count
     let sellOrder: WebullTrade | undefined | null = null;
     while (this.sellTrades.length) {
@@ -97,6 +99,7 @@ export class WebullTradeModel {
         this.buyTrades.splice(buyTradeIndex, 1);
       }
     }
+    return this.completedTrades;
   }
 
   // symbol: SPY240606P00533000

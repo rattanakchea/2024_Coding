@@ -1,0 +1,20 @@
+{
+  "name": "2024_coding",
+  "version": "1.0.0",
+  "description": "2024 coding projects: typescript, leetcode",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "coding",
+    "typescript",
+    "node",
+    "nextjs"
+  ],
+  "author": "rattanak chea",
+  "license": "ISC",
+  "dependencies": {
+    "export-to-csv": "^1.3.0"
+  }
+}
