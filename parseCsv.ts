@@ -1,6 +1,6 @@
-import { mkConfig, generateCsv, asString } from "export-to-csv";
-import { writeFile } from "node:fs";
-import { Buffer } from "node:buffer";
+// import { mkConfig, generateCsv, asString } from "export-to-csv";
+// import { writeFile } from "node:fs";
+// import { Buffer } from "node:buffer";
 
 import { TradeJournal } from "./tradeJournal.model";
 
@@ -36,9 +36,14 @@ console.log("buy trades", tradeJournal.webullTradeModel.getOrders("buy").length)
 console.log("sell trades", tradeJournal.webullTradeModel.getOrders("sell").length);
 
 tradeJournal.init();
-console.log("completeTrades trades", tradeJournal.buySellPairTrades.length, tradeJournal.buySellPairTrades);
-console.log("buy trades", tradeJournal.webullTradeModel.buyTrades);
-console.log("sell  trades", tradeJournal.webullTradeModel.sellTrades);
+console.log("buySellPairTrades trades", tradeJournal.buySellPairTrades.length, tradeJournal.buySellPairTrades);
+// console.log("buy trades", tradeJournal.webullTradeModel.buyTrades);
+// console.log("sell  trades", tradeJournal.webullTradeModel.sellTrades);
+console.log("transformToCompletedTrade-----");
+
+tradeJournal.transformToCompletedTrade();
+console.log("custom trades --->", tradeJournal.trades);
+
 
 // ------- export to csv
 // mkConfig merges your options with the defaults
