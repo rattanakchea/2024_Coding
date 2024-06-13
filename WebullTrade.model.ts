@@ -16,7 +16,6 @@ export class WebullTrade {
     // assign to Trade class members
     let filled, totalQty;
     [this.name, this.symbol, this.side, this.status, filled, totalQty, this.price, this.avgPrice, this.timeInForce, this.placedTime, this.filledTime] = trades;
-
     this.filled = Number(filled);
     this.totalQty = Number(totalQty);
   }
@@ -37,7 +36,6 @@ export class WebullTradeModel {
       if (wTrade?.status?.toLowerCase() !== "filled") continue;
       this.allTrades.push(wTrade);
     }
-
     this.buyTrades = this.getOrders("buy"); // buy Orders
     this.sellTrades = this.getOrders("sell");
   }
@@ -75,6 +73,7 @@ export class WebullTradeModel {
     return this.completedTrades;
   }
 
+  // main algorithm to process matching trades
   processTrade(): WebullTrade[][] {
     // complete trade count
     let sellOrder: WebullTrade | undefined | null = null;

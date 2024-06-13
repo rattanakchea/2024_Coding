@@ -12,31 +12,30 @@ class CustomTrade {
   entry: string = ""; // entry price
   exit: string = ""; // exit price
 
-  constructor(wTrade: WebullTrade) {
+  constructor(buyOrder: WebullTrade, sellOrder: WebullTrade) {
     // validation, trade must be filled
-    if (wTrade.status && wTrade.status.toLowerCase() !== "filled") {
+    if (buyOrder.status && buyOrder.status.toLowerCase() !== "filled") {
       console.error("The trade was not filled.");
       return;
     }
-
-    // construct only new Trade that is a buy order
-    if (wTrade.side?.toLowerCase() === "sell") {
-      console.error("The trade is a sell order. Cannot construct a new Trade");
+    // buyOrder.filled equals sellOrder.filled
+    if (buyOrder.filled !== sellOrder.filled) {
+      console.error("The trade filled quantity does not match");
       return;
     }
-
-    // console.log("constructor WTrade: ", wTrade);
-    // If it is a Sell Order (close the trade)
-    // Dont construct a new Object, merge with the existing buy Trade
-    const [ticker, expirationDate, time, timezone, side, strike] = wTrade.name.split(" ");
-    this.name = wTrade.name;
+    const [ticker, expirationDate, time, timezone, side, strike] = buyOrder.name.split(" ");
+    this.name = buyOrder.name;
     this.ticker = ticker;
     this.expirationDate = expirationDate;
     this.strike = strike + (side === "Call" ? "C" : "P");
-    this.entryDateTime = wTrade.filledTime;
-    this.qty = wTrade.filled || wTrade.totalQty;
-    this.entry = wTrade.avgPrice; //entry price
-    this.symbol = wTrade.symbol;
+    this.entryDateTime = buyOrder.filledTime;
+    this.qty = buyOrder.filled || buyOrder.totalQty;
+    this.entry = buyOrder.avgPrice; //entry price
+    this.symbol = buyOrder.symbol;
+
+    const [s_ticker, s_expirationDate, s_time, s_timezone, s_side, s_strike] = sellOrder.name.split(" ");
+    this.exit = sellOrder.avgPrice; //exit price
+    this.exitDateTime = sellOrder.filledTime;
   }
 
   isTradeOpen(): boolean {
@@ -52,7 +51,7 @@ export class TradeJournal {
   trades: CustomTrade[] = []; // can be a Hashmap?
 
   webullTradeModel: any;
-  private _completedTrades: CustomTrade[] = []; // have buy-sell order
+  private _buySellPairTrades: CustomTrade[] = []; // have buy-sell order
 
   constructor(tradesStringArray: string[][], broker: string) {
     if (broker === "webull") {
@@ -61,16 +60,23 @@ export class TradeJournal {
   }
 
   init() {
-    const trades = this.webullTradeModel.processTrade();
-    this.completedTrades = trades;
+    this._buySellPairTrades = this.webullTradeModel.processTrade();
   }
 
-  set completedTrades(trades) {
-    this.completedTrades = trades;
+  set buySellPairTrades(trades) {
+    this._buySellPairTrades = trades;
   }
 
-  get completedTrades() {
-    return this._completedTrades;
+  get buySellPairTrades() {
+    return this._buySellPairTrades;
+  }
+
+  // transform to CustomTrades
+  tranformToCompletedTrade() {
+    for (let [buyOrder, sellOrder] of this.buySellPairTrades) {
+      let customTrade = new CustomTrade(buyOrder, sellOrder);
+      this.trades.push(customTrade);
+    }
   }
 }
 
