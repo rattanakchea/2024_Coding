@@ -1,7 +1,8 @@
 # TODO
 
 - Try CSV library
-- Export to CSV: export-to-csv npm package
+- Export to CSV: export-to-csv npm package, not working
+- currently use FIFO for trade, try Last in, Last out
 
 ## Resource
 
@@ -12,4 +13,4 @@
 ## Issues
 
 - Extra \r character when parsing CSV: https://stackoverflow.com/questions/67520221/converting-csv-to-json-adds-r-characters
-- 
+

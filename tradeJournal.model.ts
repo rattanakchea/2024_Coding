@@ -14,12 +14,13 @@ class CustomTrade {
 
   constructor(buyOrder: WebullTrade, sellOrder: WebullTrade) {
     // validation, trade must be filled
-    if (buyOrder.status && buyOrder.status.toLowerCase() !== "filled") {
+    if (buyOrder?.status && buyOrder.status.toLowerCase() !== "filled") {
       console.error("The trade was not filled.");
       return;
     }
     // buyOrder.filled equals sellOrder.filled
     if (buyOrder.filled !== sellOrder.filled) {
+      console.log(buyOrder, sellOrder);
       console.error("The trade filled quantity does not match");
       return;
     }

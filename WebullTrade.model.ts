@@ -44,35 +44,6 @@ export class WebullTradeModel {
     return this.allTrades.filter((item) => item.side.toLowerCase() === orderSide);
   }
 
-  // Not correct implementation
-  processTradeOld(): WebullTrade[][] {
-    // complete trade count
-    for (let i = 0; i < this.sellTrades.length; i++) {
-      const sellOrder = this.sellTrades[i];
-      const buyTradeIndex = this.findMatchingOpenTradeIndex(sellOrder.symbol);
-      const buyOrder = this.buyTrades[buyTradeIndex];
-      if (buyOrder.filled == sellOrder.filled) {
-        this.completedTrades.push([buyOrder, sellOrder]);
-        // remove from openTrades
-        this.buyTrades.splice(buyTradeIndex, 1);
-        this.sellTrades.splice(i, 1);
-      } else if (buyOrder.filled > sellOrder.filled) {
-        buyOrder.filled = -sellOrder.filled;
-        this.completedTrades.push([buyOrder, sellOrder]);
-        this.sellTrades.splice(i, 1);
-        // update buyOrder
-        this.buyTrades[buyTradeIndex].filled = -sellOrder.filled;
-      } else if (buyOrder.filled < sellOrder.filled) {
-        sellOrder.filled = -buyOrder.filled;
-        this.completedTrades.push([buyOrder, sellOrder]);
-        this.buyTrades.splice(i, 1);
-        // update sellOrder
-        this.sellTrades[i].filled = -sellOrder.filled;
-      }
-    }
-    return this.completedTrades;
-  }
-
   // main algorithm to process matching trades
   processTrade(): WebullTrade[][] {
     // complete trade count
@@ -81,19 +52,26 @@ export class WebullTradeModel {
       if (!sellOrder) {
         sellOrder = this.sellTrades.shift();
       }
+      debugger;
+      console.log("------------");
+      console.log(this.buyTrades);
       const buyTradeIndex = this.findMatchingOpenTradeIndex(sellOrder!.symbol);
       const buyOrder = this.buyTrades[buyTradeIndex];
-      if (buyOrder.filled == sellOrder?.filled) {
+      // Todo add error check when buyTradeIndex = -1, not found
+      console.log("------buyTradeIndex------");
+      console.log(buyTradeIndex);
+      // if (!buyOrder) sellOrder = null;
+      if (buyOrder?.filled == sellOrder?.filled) {
         this.completedTrades.push([buyOrder, sellOrder]);
         // remove from buy trades
         this.buyTrades.splice(buyTradeIndex, 1);
         sellOrder = null;
       } else if (buyOrder.filled > sellOrder!.filled) {
-        buyOrder.filled = -sellOrder!.filled;
+        buyOrder.filled -= sellOrder!.filled;
         this.completedTrades.push([buyOrder, sellOrder!]);
         sellOrder = null;
       } else if (buyOrder.filled < sellOrder!.filled) {
-        sellOrder!.filled = -buyOrder.filled;
+        sellOrder!.filled -= buyOrder.filled;
         this.completedTrades.push([buyOrder, sellOrder!]);
         this.buyTrades.splice(buyTradeIndex, 1);
       }
@@ -107,6 +85,10 @@ export class WebullTradeModel {
   }
 
   findMatchingOpenTradeIndex(symbol: string) {
-    return this.buyTrades.findIndex((item) => item.symbol == symbol);
+    // use FIFO by finding the first index
+    // return this.buyTrades.findIndex((item) => item.symbol == symbol);
+
+    // use First In Last OUt, by finding the last index
+    return this.buyTrades.findLastIndex((item) => item.symbol == symbol);
   }
 }

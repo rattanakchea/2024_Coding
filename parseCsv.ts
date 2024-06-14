@@ -3,8 +3,7 @@ import { TradeJournal } from "./tradeJournal.model";
 // Include fs module
 const fs = require("fs");
 
-// const fileName = "Webull_Orders_Records_Options.csv";
-const fileName = "webull_trade1.csv";
+const fileName = "wb_june.csv";
 
 // convert trades string to Array of string
 const trades = fs
