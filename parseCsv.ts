@@ -1,7 +1,3 @@
-// import { mkConfig, generateCsv, asString } from "export-to-csv";
-// import { writeFile } from "node:fs";
-// import { Buffer } from "node:buffer";
-
 import { TradeJournal } from "./tradeJournal.model";
 
 // Include fs module
@@ -44,18 +40,24 @@ console.log("transformToCompletedTrade-----");
 tradeJournal.transformToCompletedTrade();
 console.log("custom trades --->", tradeJournal.trades);
 
+// navigator.clipboard.writeText(tradeJournal.trades.toString());
 
-// ------- export to csv
-// mkConfig merges your options with the defaults
-// and returns WithDefaults<ConfigOptions>
-// const csvConfig = mkConfig({ useKeysAsHeaders: true });
+// import copy from 'copy-to-clipboard';
 
-// const csv = generateCsv(csvConfig)([]);
-// const filename = `${csvConfig.filename}.csv`;
-// const csvBuffer = new Uint8Array(Buffer.from(asString(csv)));
+// copy('Text');
 
-// // Write the csv file to disk
-// writeFile(filename, csvBuffer, (err) => {
-//   if (err) throw err;
-//   console.log("file saved: ", filename);
+// // Copy with options
+// copy('Text', {
+//   debug: true,
+//   message: 'Press #{key} to copy',
 // });
+
+var ncp = require("copy-paste");
+
+// Todo override toString method
+ncp.copy(tradeJournal.trades.toString(), function () {
+  // complete...
+});
+
+const ObjectsToCsv = require("objects-to-csv");
+new ObjectsToCsv(tradeJournal.trades).toDisk("./result-trades.csv", { append: true });

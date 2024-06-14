@@ -79,6 +79,12 @@ export class TradeJournal {
       this.trades.push(customTrade);
     }
   }
+
+  print() {
+    for (let trade of this.trades) {
+      
+    }
+  }
 }
 
 // Testing ?
