@@ -11,6 +11,7 @@ const trades = fs
   .readFileSync(fileName, {
     encoding: "utf-8",
   })
+  .replace(/\r/g, "") // replace extra \r
   .split("\n")
   .map((row: string): string[] => {
     return row.split(",");
@@ -60,4 +61,4 @@ ncp.copy(tradeJournal.trades.toString(), function () {
 });
 
 const ObjectsToCsv = require("objects-to-csv");
-new ObjectsToCsv(tradeJournal.trades).toDisk("./result-trades.csv", { append: true });
+new ObjectsToCsv(tradeJournal.trades).toDisk("./result-trades.csv");

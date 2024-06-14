@@ -6,8 +6,8 @@ class CustomTrade {
   ticker: string = "";
   expirationDate: string = "";
   strike: string = "";
-  entryDateTime?: string = "";
-  exitDateTime?: string = "";
+  entryDateTime: string = "";
+  exitDateTime: string = "";
   qty: number | string = 0;
   entry: string = ""; // entry price
   exit: string = ""; // exit price
@@ -28,14 +28,14 @@ class CustomTrade {
     this.ticker = ticker;
     this.expirationDate = expirationDate;
     this.strike = strike + (side === "Call" ? "C" : "P");
-    this.entryDateTime = buyOrder.filledTime;
+    this.entryDateTime = buyOrder.filledTime.replace("EDT", "");
     this.qty = buyOrder.filled || buyOrder.totalQty;
     this.entry = buyOrder.avgPrice; //entry price
     this.symbol = buyOrder.symbol;
 
     const [s_ticker, s_expirationDate, s_time, s_timezone, s_side, s_strike] = sellOrder.name.split(" ");
     this.exit = sellOrder.avgPrice; //exit price
-    this.exitDateTime = sellOrder.filledTime;
+    this.exitDateTime = sellOrder.filledTime.replace("EDT", "");
   }
 
   isTradeOpen(): boolean {
@@ -82,7 +82,6 @@ export class TradeJournal {
 
   print() {
     for (let trade of this.trades) {
-      
     }
   }
 }
