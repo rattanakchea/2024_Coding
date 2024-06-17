@@ -1,2 +1,5 @@
 node_modules
 result-trades.csv
+
+*.js
+*.js.map
