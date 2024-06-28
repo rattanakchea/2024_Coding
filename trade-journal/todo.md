@@ -14,3 +14,5 @@
 
 - Extra \r character when parsing CSV: https://stackoverflow.com/questions/67520221/converting-csv-to-json-adds-r-characters
 
+- Export does not work in browser: https://stackoverflow.com/questions/43472778/typescript-exports-is-not-defined. How to debug in chrome??
+
