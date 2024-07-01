@@ -19,6 +19,4 @@ function twoSum(nums: number[], target: number): number[] {
 // Test
 
 let nums = [2,7,11,15];
-console.log(twoSum(nums, 9));
-
 export  {twoSum};
