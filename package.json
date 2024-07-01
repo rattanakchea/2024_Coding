@@ -4,7 +4,7 @@
   "description": "2024 coding projects: typescript, leetcode",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "npx jest"
   },
   "keywords": [
     "coding",
